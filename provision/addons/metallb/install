@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ -z $1 ] && [ ! -f $(dirname "$0")/metal-lb-config.yaml ]; then
+  echo "CLUSTER_EXTERNAL_ADDRESSES must be supplied"
+  exit 1
+fi
+
+CLUSTER_EXTERNAL_ADDRESSES=$1
+echo "CLUSTER_EXTERNAL_ADDRESSES: $CLUSTER_EXTERNAL_ADDRESSES"
+# ----------------------------------- create ConfigMap YAML from TEMPLATE and {{CLUSTER_EXTERNAL_ADDRESSES}}
+if [ ! -z $1 ]; then
+  cat $(dirname "$0")/metal-lb-config.yaml.templace | sed "s/{{CLUSTER_EXTERNAL_ADDRESSES}}/${CLUSTER_EXTERNAL_ADDRESSES}/g" > $(dirname "$0")/metal-lb-config.yaml
+fi
+
+#uninstall
+kubectl delete namespace metallb-system
+kubectl delete clusterrole metallb-system:controller
+kubectl delete clusterrole metallb-system:speaker
+kubectl delete clusterrolebinding metallb-system:controller
+kubectl delete clusterrolebinding metallb-system:speaker
+
+
+echo "---------------------------------- Installing and configuring LoadBalancer"
+kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.3/manifests/metallb.yaml
+
+kubectl apply -f $(dirname "$0")/metal-lb-config.yaml
+
+echo "--------- Fix Error : {n} node(s) had taints that the pod didn't tolerate"
+kubectl taint nodes --all node-role.kubernetes.io/master-
+#kubectl descrive pod $($(dirname "$0")/../../podsOfDeployment webapp)
+#kubectl get svc

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo "------------------------------------ Installing and configuring Dashboard"
+#install dashboard
+
+kubectl delete namespace kubernetes-dashboard
+kubectl delete clusterrole kubernetes-dashboard
+kubectl delete clusterrolebinding kubernetes-dashboard
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+kubectl patch svc kubernetes-dashboard -n kubernetes-dashboard --patch '{"spec": {"type": "LoadBalancer"}}'
+kubectl apply -f  $(dirname "$0")/dashboard-access.yaml
+sleep 3
+
+# fix deploying problem. behavior: just after deploying dashboard pod hungsup
+kubectl delete pod $(/home/vagrant/provision/tools/podsOfDeployment kubernetes-dashboard -n kubernetes-dashboard) -n kubernetes-dashboard
+
+#uncomment to see service details ip address,...
+#kubectl get svc -n kubernetes-dashboard
+# uncomment to find dashboard execution problems
+#kubectl describe pod $(/home/vagrant/provision/tools/podsOfDeployment kubernetes-dashboard -n kubernetes-dashboard) -n kubernetes-dashboard
+#kubectl logs $(/home/vagrant/provision/tools/podsOfDeployment kubernetes-dashboard -n kubernetes-dashboard) -n kubernetes-dashboard

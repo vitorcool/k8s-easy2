@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "---------------------------------------------- Installing Helm and Tiller"
+# try remove clusterRoleBinding and respective tiller serviceaccount
+kubectl delete clusterrolebinding tiller
+kubectl delete serviceaccount tiller -n kube-system
+
+#Create the tiller serviceaccount:
+kubectl create serviceaccount tiller -n kube-system
+
+#Next, bind the tiller serviceaccount to the cluster-admin role:
+kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+
+
+# install helm3
+curl -fsSLJ -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+rm ./get_helm.sh
+
+# add repository on our cluster
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo update

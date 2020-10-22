@@ -1,0 +1,11 @@
+#!/bin/bash
+
+kubectl delete service webapp01-http
+kubectl delete deployment webapp01
+kubectl create deployment --image=jonaswerner/k8s-nodeinfo-blue:latest webapp01 --replicas=3
+kubectl expose deployment webapp01 --name=webapp01-http --type=LoadBalancer --port=80 --target-port=5000
+
+
+sleep 2
+kubectl get pods -o wide
+kubectl get services -o wide

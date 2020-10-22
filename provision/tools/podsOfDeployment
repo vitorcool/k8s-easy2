@@ -1,0 +1,73 @@
+#!/bin/bash
+# Command: podsOfDeployment <-n namespace> <-d> <-h> <deployment:resource_name>
+#set -vx
+function show_help {
+    echo "Usage: $(basename $0) RESOURCE_NAME [-n namespace] [-d] [-h]"
+    echo ""
+    echo "    -n: used namespace"
+    echo "    -d: dbg info"
+    echo "    -h: help"
+}
+
+function debug_o() {
+	if $CMD_DEBUG; then
+		echo $1 $2 $3 $4 $5 $6 $7 $8 $9
+	fi
+}
+
+FIND_RESOURCE_NAME=$1
+RESOURCE_NAME=""
+RESOURCE_TYPE=deployment
+RESOURCE_NAMESPACE=default
+CMD_DEBUG=false
+
+# set getopts start looking to opts starting on 2nd argument. first on is reserved to define resource_name
+OPTIND=2
+while getopts ":n:d :h" arg; do
+  case $arg in
+    n)
+	  RESOURCE_NAMESPACE=$OPTARG
+	  ;;
+    d)
+	  CMD_DEBUG=true
+	  ;;
+	h)
+	  show_help
+	  echo "-h $OPTARG invoked help"
+	  exit 0
+	  ;;
+	:)
+	  show_help
+      echo "$0: Must supply an argument to -$OPTARG." >&2
+      exit 1
+      ;;
+    ?)
+	  show_help
+      echo "Invalid option: -${OPTARG}."
+      exit 2
+      ;;
+  esac
+done
+# if RESOUCE_NAME start with - => get namespaces & exit
+if [ -z "$FIND_RESOURCE_NAME" ] || [[ $FIND_RESOURCE_NAME == -* ]]; then
+  show_help
+  echo "RESOUCE_NAME must be supplied."
+  kubectl get deployments -n $RESOURCE_NAMESPACE
+  exit 1
+fi
+
+debug_o "FIND_RESOURCE_NAME=$FIND_RESOURCE_NAME"
+debug_o "RESOURCE_TYPE=$RESOURCE_TYPE"
+debug_o "RESOURCE_NAMESPACE=$RESOURCE_NAMESPACE"
+debug_o "CMD_DEBUG=$CMD_DEBUG"
+
+GET_DEPLOY_CMD="kubectl get ${RESOURCE_TYPE}s --no-headers=true -n ${RESOURCE_NAMESPACE}"
+debug_o $GET_DEPLOY_CMD
+DEPLOY_NAMES_FOUND=$( $GET_DEPLOY_CMD |grep ^${FIND_RESOURCE_NAME}| awk '{print $1}' | xargs )
+debug_o "found: $DEPLOY_NAMES_FOUND"
+
+
+GET_PODS_CMD="kubectl get pods -n ${RESOURCE_NAMESPACE} --no-headers=true"
+debug_o $GET_PODS_CMD
+PODS_FOUND=$($GET_PODS_CMD|grep ^${FIND_RESOURCE_NAME}| awk '{print $1}' | xargs )
+echo $PODS_FOUND
