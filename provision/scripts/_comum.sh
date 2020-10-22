@@ -1,4 +1,6 @@
-
+#
+# k8sEasy2S
+#
 if [ "${IGNORE_PROVISION}" == "true" ];then
   echo "IGNORE_PROVISION=$IGNORE_PROVISION"
   exit 1
@@ -9,11 +11,11 @@ dd=/home/vagrant
 envFile="$dd/provision/.env.$HOSTNAME"
 if [ -z $CLUSTER_NODE_NAME ]; then
   echo "Loading Cluster setup variable into shell enviroment file:$envFile"
-  if [ -f $envFile ];then
+  if [ \ $envFile ];then
     . $envFile #loaded
-    cowsay "$envFile Loaded OK"
+    cowsay " $envFile Loaded OK"
   else
-    cowsay "$envFile Load FAIL"
+    cowsay " $envFile Load FAIL"
   fi
 fi
 
@@ -41,9 +43,9 @@ VM_CPUS='${VM_CPUS}'
 VM_SYNC_FOLDERS='${VM_SYNC_FOLDERS}'
 EOF
 
-    cowsay "$file Created"
+    cowsay " $file Created"
   else
-    echo "Enable do save Cluster setup variables. CLUSTER_NODE_NAME=|Missing|."
+    echo "Enable do save Cluster .env file. CLUSTER_NODE_NAME=|Missing|."
   fi
 }
 
@@ -56,4 +58,14 @@ function node_info {
   echo "CLUSTER_LOADBALANCER_IP_RANGE: ${CLUSTER_LOADBALANCER_IP_RANGE}"
   echo "USER: $(whoami)"
   echo "DIRECTORY: $(pwd)"
+}
+
+function backup_file_or_restore {
+  $f=$1
+  if [ ! -f $f.backup ]; then
+    cp $f $f.backup
+  else
+    cp $f.backup $f
+  fi
+
 }
