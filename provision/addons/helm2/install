@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# k8sEasy2S
+#
 
 echo "---------------------------------------------- Installing Helm and Tiller"
 # try remove clusterRoleBinding and respective tiller serviceaccount
@@ -7,7 +10,6 @@ kubectl delete serviceaccount tiller -n kube-system
 
 #Create the tiller serviceaccount:
 kubectl -n kube-system create serviceaccount tiller
-
 #Next, bind the tiller serviceaccount to the cluster-admin role:
 kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 

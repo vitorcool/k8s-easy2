@@ -1,3 +1,6 @@
+#
+# k8sEasy2S
+#
 dd=/home/vagrant
 . $dd/provision/scripts/_comum.sh
 save_bash_environment
@@ -59,12 +62,8 @@ read -p "Pause Time 5 seconds" -t 5
 function replace_docker_daemon_args {
   daemon_args="$1"
   S_FILE=/lib/systemd/system/docker.service
-  if [ -z ${S_FILE}.backup ];then
-    cp $S_FILE.backup $S_FILE
-  else
-    cp $S_FILE $S_FILE.backup
-  fi
-  cat $S_FILE | grep  ^ExecStart=
+  create_copy_or_restore $S_FILE
+
   S_SEARCH=$(cat $S_FILE | grep  ^ExecStart=)
   S_CMD=$(cat $S_FILE | awk "/ExecStart=/"'{print $1}')
   S_REPLACE="${S_CMD} ${daemon_args}"
@@ -72,10 +71,7 @@ function replace_docker_daemon_args {
   sed -i "s|$S_SEARCH|$S_REPLACE|" $S_FILE
   cat $S_FILE | grep  ^ExecStart=
 }
-###### MASTER NODE START ######
-if [[ ${CLUSTER_NODE_IDX} -eq 1 ]];then
-  replace_docker_daemon_args "${VM_DOCKER_DAEMON_ARGS}"
-fi
+replace_docker_daemon_args "${VM_DOCKER_DAEMON_ARGS}"
 
 # Restart docker.
 systemctl daemon-reload

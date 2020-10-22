@@ -17,7 +17,6 @@ VM_SYNC_FOLDERS = [
   ["d:/WWW","/www"]
 ]
 
-
 def cluster_provision_args()
   {
     "IGNORE_PROVISION" => "#{IGNORE_PROVISION}",

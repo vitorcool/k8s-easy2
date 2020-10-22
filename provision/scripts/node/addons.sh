@@ -1,3 +1,6 @@
+#
+# k8sEasy2S
+#
 dd=/home/vagrant
 . $dd/provision/scripts/_comum.sh
 
@@ -5,6 +8,7 @@ echo "------------------------------------------------- Configuring Master node"
 echo "USER: $(whoami)"
 echo "DIRECTORY: $(pwd)"
 echo "-------------------------------------------------------------------------"
+
 
 $dd/provision/addons/flannel/install
 $dd/provision/addons/metallb/install

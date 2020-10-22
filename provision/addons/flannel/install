@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# k8sEasy2S
+#
 
 echo "---------------------------------------------- Installing Flannel network"
 kubectl delete podsecuritypolicy psp.flannel.unprivileged
@@ -11,5 +14,4 @@ kubectl delete DaemonSet kube-flannel-ds-arm64 -n kube-system
 kubectl delete DaemonSet kube-flannel-ds-arm -n kube-system
 kubectl delete DaemonSet kube-flannel-ds-ppc64le -n kube-system
 kubectl delete DaemonSet kube-flannel-ds-s390x -n kube-system
-
 kubectl apply -f $(dirname "$0")/kube-flannel.yml

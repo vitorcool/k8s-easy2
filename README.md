@@ -7,8 +7,6 @@
 - fully function Metallb LoadBalancer
 - webapp01 deployment YAML
 
-
-
 ## Requirements
 ###### *The host computer must have install*
 - [git](https://git-scm.com/downloads)

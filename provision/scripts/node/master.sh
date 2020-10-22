@@ -1,3 +1,6 @@
+#
+# k8sEasy2S
+#
 dd=/home/vagrant
 . $dd/provision/scripts/_comum.sh
 
@@ -6,6 +9,7 @@ echo "USER: $(whoami)"
 echo "DIRECTORY: $(pwd)"
 echo "CLUSTER_NODE_IP: $CLUSTER_NODE_IP"
 echo "-------------------------------------------------------------------------"
+
 
 kubeadm init --apiserver-advertise-address=$CLUSTER_NODE_IP --pod-network-cidr=10.244.0.0/16 | tee $dd/k8s-install.log
 echo "Error $?"
