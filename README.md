@@ -2,7 +2,8 @@
 <img src="https://kubernetes.io/images/favicon.png" width="100" height="100" /> <img src="https://hyzxph.media.zestyio.com/Vagrant_VerticalLogo_FullColor.rkvQk0Hax.svg" width="100" height="100" />
 
 ## This Vagrant project will start a local kubernetes cluster with:
-- 1 master node and 2 workers
+- 1 master node
+- Customizable number of worker nodes
 - [Metallb LoadBalancer](https://metallb.universe.tf/installation/)
 - [Flannel Virtual Network](https://coreos.com/flannel/docs/latest/)
 - [helm3 Package Manager](https://helm.sh/docs/)
