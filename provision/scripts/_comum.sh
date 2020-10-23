@@ -1,5 +1,5 @@
 #
-# k8sEasy2S
+# k8sEasy2
 #
 if [ "${IGNORE_PROVISION}" == "true" ];then
   echo "IGNORE_PROVISION=$IGNORE_PROVISION"

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# k8sEasy2S
+# k8sEasy2
 #
 
 echo "---------------------------------------------- Installing Flannel network"

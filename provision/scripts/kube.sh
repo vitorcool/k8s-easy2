@@ -1,5 +1,5 @@
 #
-# k8sEasy2S
+# k8sEasy2
 #
 dd=/home/vagrant
 . $dd/provision/scripts/_comum.sh
