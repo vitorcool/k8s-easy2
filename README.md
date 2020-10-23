@@ -2,20 +2,21 @@
 <img src="https://kubernetes.io/images/favicon.png" width="100" height="100" /> <img src="https://hyzxph.media.zestyio.com/Vagrant_VerticalLogo_FullColor.rkvQk0Hax.svg" width="100" height="100" />
 
 ## This Vagrant project will start a local kubernetes cluster with:
-- 1 master node and 2 slaves
-- Kubernetes Dashboard
-- fully function Metallb LoadBalancer
-- webapp01 deployment YAML
+- 1 master node and 2 workers
+- [Metallb LoadBalancer](https://metallb.universe.tf/installation/)
+- [Flannel Virtual Network](https://coreos.com/flannel/docs/latest/)
+- [helm3 Package Manager](https://helm.sh/docs/)
+- [Kubernetes dashboard](https://kubernetes.io/docs/setup/)
 
 ## Requirements
-###### *The host computer must have install*
+- *Computer to host cloud setup*
 - [git](https://git-scm.com/downloads)
 - [vagrant](https://www.vagrantup.com/downloads.html) - This project has been devepoled and tested with Vagrant >=2.2.10 .
 - [virtualbox](https://www.virtualbox.org/wiki/Downloads)
 
-## Cluster configurable
 
-### Default configuration
+## Cluster default configuration
+ k8sEasy2 setup the cluster in the <b> Vagrantfile </b> file
   ```shell
   # disable vagrant provision scripts
   IGNORE_PROVISION = false
@@ -54,67 +55,60 @@
 
 ## Usage
 
-
-1. Clone the repo and change to k8s-easy2 directory
+1. Clone repo and change directory to k8s-easy2 directory
     ```shell
     $ git clone https://github.com/vitorcool/k8s-easy2
     $ cd k8s-easy2
     ```
- Edit Vagrantfile to tuneup your cluster settings, or just skip this part and use default settings
+    Now is time to setup k8sEasy2 Cluster by editing <b>Vagranfile</b> or not, and just use de cluster default configuration.
 
 2. Run the cluster
     ```shell
+    # The first time you run the "vagrant up" command, it will take a long time.
+    # So be patient.
+    # If the host computer crashes, you try to reduce CLUSTER_INSTANCES and
+    # VM_MEMORY in the cluster configuration  
     $ vagrant up
     ```
     or
+
     ```shell
-    $ vagrant up kdev1 # will UP only kdev1
-    $ vagrant up    
-    ```
-2. Solve install probleams
-    ```shell
-    # There are 3 Provision script:
-    #   1 bootstrap
-    #   2 kube
-    #   3 node
-
-    # Remenber:
-    # To be a Node, be kube first is a must
-    # Even a Kube has to Bootstrap
-
-    # So check instalation logs and :
-    # Provision Kube with bootstrap - 1st provision
-    $ vagrant up --provision-with bootstrap
-
-    # OR
-
-    # if bootstrap provision OK
-    # Provision kube - 2st provision
-    $ vagrant up --provision-with kube
-
-    # OR
-
-    # if Easy2 provision OK
-    # Provision E kube - 2st provision
-    $ vagrant up --provision-with kube
-    ```
-    or
-    ```shell
-    $ vagrant up kdev1 # will UP only kdev1
+    # UP only kdev1 - Master
+    $ vagrant up kdev1
+    # UP all not already up - kdev2 and kdev3 - Workers
     $ vagrant up    
     ```
 
-3. Access Master node
+3. SSH Connect to node
     ```shell
+    # Connect to master
     $ vagrant ssh vdev1
+    # Connect to worker1
+    $ vagrant ssh vdev2
+    # Connect to worker2
+    $ vagrant ssh vdev3
     ```
-4. Reboot Cluster
+5. Reboot
     ```shell
+    #  Reboot entire Cluster
     $ vagrant reload    
+
+    # Reboot Master
+    $ vagrant reload kdev1  
+
+    # Reboot Worker 1
+    $ vagrant reload kdev2  
+
+    # Reboot Worker 2
+    $ vagrant reload kdev3
     ```
-4. Destroy Cluster
+
+6. Destroy Cluster
+    ```shell
     $ vagrant destroy
     ```    
+
+
 ## Node Provision
 
 ### There are 3 Provision scripts:
@@ -122,7 +116,7 @@
 --- | --- | ---
 |1|bootstrap | OS enviroment
 |2|kube|Kubernetes Core
-|3|node| Cluster setup - Master node and Slave node
+|3|node| Cluster setup - Master and worker nodes
 
 
 1. Install provison - can solve problems
