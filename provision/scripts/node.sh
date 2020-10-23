@@ -18,6 +18,6 @@ fi
 ###### WORKER NODE START ######
 if [[ ${CLUSTER_NODE_IDX} -gt 1 ]];then
   # run as root user
-  runuser -l root -c "$dd/provision/scripts/node/worker.sh"
+  runuser -l root -c "$dd/provision/scripts/node/worker.sh"  
 fi
 ###### WORKER NODE END ######

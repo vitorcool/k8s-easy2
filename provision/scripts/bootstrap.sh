@@ -33,7 +33,7 @@ for ((i = 1 ; i <= n; i++)); do
   hostIP="${CLUSTER_IP_PREFIX}.$node_ip_less"
   echo "$hostIP $hostNAME" >> /etc/hosts
 done
-cowsay $(cat /etc/hosts)
+cowsay $(cat /etc/hosts|grep ${CLUSTER_IP_PREFIX})
 
 echo "------------------------------------------------------ Update DNS Resolver to: ${VM_DNS_RESOLVER}"
 echo "nameserver ${VM_DNS_RESOLVER}">/etc/resolv.conf

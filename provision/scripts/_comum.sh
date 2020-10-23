@@ -1,6 +1,8 @@
 #
 # k8sEasy2
 #
+echo "HOSTNAME=$HOSTNAME"
+
 if [ "${IGNORE_PROVISION}" == "true" ];then
   echo "IGNORE_PROVISION=$IGNORE_PROVISION"
   exit 1
@@ -9,9 +11,10 @@ fi
 dd=/home/vagrant
 # load cluster setup variables if they exist
 envFile="$dd/provision/.env.$HOSTNAME"
+
 if [ -z $CLUSTER_NODE_NAME ]; then
   echo "Loading Cluster setup variable into shell enviroment file:$envFile"
-  if [ \ $envFile ];then
+  if [ -f $envFile ];then
     . $envFile #loaded
     cowsay " $envFile Loaded OK"
   else
@@ -61,11 +64,13 @@ function node_info {
 }
 
 function backup_file_or_restore {
-  $f=$1
-  if [ ! -f $f.backup ]; then
-    cp $f $f.backup
+
+  if [ ! -f $1.backup ]; then
+    cp $1 $1.backup
+    cowsay "Created backup file $1.backup"
   else
-    cp $f.backup $f
+    cp $1.backup $1
+    cowsay "Restored backup file $1"
   fi
 
 }

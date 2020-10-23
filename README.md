@@ -38,7 +38,7 @@
   # Docker version for install - For last version just set VM_DOCKER_VER empty
   VM_DOCKER_VER = "18.06.2~ce~3-0~ubuntu"
   # Change docker deamon args to enable TCPIP access
-  VM_DOCKER_DAEMON_ARGS = "-H fd:// -H tcp://#{CLUSTER_IP_PREFIX}.#{CLUSTER_NODE_IP_LESS_START}:4243"
+  VM_DOCKER_DAEMON_ARGS = "-H fd:// -H tcp://\${CLUSTER_NODE_IP}:4243"
   # Set VM_DNS_RESOLVER
   VM_DNS_RESOLVER = "8.8.8.8"
   # SSH-RSA OpenSSH to install on each cluster node sshd service

@@ -8,10 +8,10 @@ echo "-------------------------------------------------------------------------"
 
 # get copy of cluster-join to ~ directory
 cp $dd/provision/cluster-join.sh $dd/cluster-join.sh
-chmod 755 $dd/cluster-join.s
+chmod 755 $dd/cluster-join.sh
 $dd/cluster-join.sh
 if [ $? -eq 0 ];then
-  echo ""
+  cowsay "This worker joined to cluster"
 else
-  cowsay "Ops - Kubeadm join <K8S> kubeadm reset it first"
+  cowsay "Ops - This cluster worker node must be already joined with the master. To Kubeadm join <K8S> kubeadm reset it first"
 fi

@@ -7,7 +7,7 @@ NODE_NAME_PREFIX = "kdev"
 VM_DNS_RESOLVER = "8.8.8.8"
 # file SSH-RSA OpenSSH Format
 VM_SSH_ACCESS_KEY ="/home/vagrant/provision/vitor_public_key.pub"
-VM_DOCKER_DAEMON_ARGS = "-H fd:// -H tcp://#{CLUSTER_IP_PREFIX}.#{CLUSTER_NODE_IP_LESS_START}:4243"
+VM_DOCKER_DAEMON_ARGS = "-H fd:// -H tcp://\${CLUSTER_NODE_IP}:4243"
 VM_DOCKER_VER = "18.06.2~ce~3-0~ubuntu"
 VM_OS = "ubuntu/xenial64"
 VM_MEMORY = 1024 #3072
@@ -53,6 +53,7 @@ Vagrant.configure("2") do |config|
   end
   # Change the provision to match your environment
   config.vm.synced_folder "./provision", "/home/vagrant/provision"
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
   for index in 0 ... VM_SYNC_FOLDERS.size
     folder = VM_SYNC_FOLDERS[index]
     config.vm.synced_folder folder[0], folder[1]
@@ -75,9 +76,9 @@ Vagrant.configure("2") do |config|
       CLUSTER_NODE_IP = ip
       CLUSTER_NODE_IDX = i
 
-      node.vm.provision "bootstrap", type: "shell", path: "provision/scripts/bootstrap.sh", env: cluster_provision_args(), run: "runonce"
-      node.vm.provision "kube",      type: "shell", path: "provision/scripts/kube.sh",      env: cluster_provision_args(), run: "runonce"
-      node.vm.provision "node",      type: "shell", path: "provision/scripts/node.sh",      env: cluster_provision_args()
+      node.vm.provision "bootstrap", type: "shell", path: "provision/scripts/bootstrap.sh", run: "runonce", env: cluster_provision_args()
+      node.vm.provision "kube",      type: "shell", path: "provision/scripts/kube.sh", run: "runonce", env: cluster_provision_args()
+      node.vm.provision "node",      type: "shell", path: "provision/scripts/node.sh" , env: cluster_provision_args()
 
     end
   end
