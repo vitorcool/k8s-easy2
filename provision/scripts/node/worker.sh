@@ -11,7 +11,7 @@ cp $dd/provision/cluster-join.sh $dd/cluster-join.sh
 chmod 755 $dd/cluster-join.sh
 $dd/cluster-join.sh
 if [ $? -eq 0 ];then
-  cowsay "This worker joined to cluster"
+  cowsay "\"$CLUSTER_NODE_NAME\" worker joined to cluster"
 else
-  cowsay "Ops - This cluster worker node must be already joined with the master. To Kubeadm join <K8S> kubeadm reset it first"
+  cowsay "Ops - \"$CLUSTER_NODE_NAME\" cluster worker node must be already joined with the master. To Kubeadm join <K8S> kubeadm reset it first"
 fi

@@ -17,13 +17,13 @@ cmd_join=$(cat $dd/k8s-install.log | grep -A2 "kubeadm join" )
 master_inited=$(echo $cmd_join | awk "/kubeadm join/"'{print $2}')
 
 if [ "$master_inited" == "join" ]; then
-  cowsay "Cluster initialized and this is the master node"
+  cowsay "Cluster initialized and \"$CLUSTER_NODE_NAME\" is the master node"
   echo "$cmd_join" > $dd/provision/cluster-join.sh
-  cowsay "Join cluster command \r${cmd_join}"
+  cowsay "Join cluster command: ${cmd_join}"
 
   mkdir -p $dd/.kube
   cp -u /etc/kubernetes/admin.conf $dd/.kube/config
   chown vagrant:vagrant $dd/.kube/config
 else
-  cowsay "Ops - This cluster master node must be already initialized. To Kubeadm init <K8S> kubeadm reset it first"
+  cowsay "Ops - \"$CLUSTER_NODE_NAME\" cluster master node must be already initialized. To Kubeadm init <K8S> kubeadm reset it first"
 fi
