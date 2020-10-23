@@ -6,13 +6,13 @@ dd=/home/vagrant
 node_info
 
 echo "------------------------------------------------------- Installing cowsay"
-apt-get update | apt-get install cowsay -y
+apt-get update
+apt-get install cowsay -y
 cp /usr/games/cowsay /usr/bin
 
 echo "----------------------------------------------- store .env.$HOSTNAME file"
 # create .env.$HOSTNAME file
 save_bash_environment
-node_info
 
 echo "------------------------------------------------------------- Disable swap"
 swapoff -a
@@ -38,5 +38,3 @@ cowsay $(cat /etc/hosts)
 echo "------------------------------------------------------ Update DNS Resolver to: ${VM_DNS_RESOLVER}"
 echo "nameserver ${VM_DNS_RESOLVER}">/etc/resolv.conf
 cowsay $(cat /etc/resolv.conf)
-
-apt-get update

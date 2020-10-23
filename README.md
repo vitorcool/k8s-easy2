@@ -54,6 +54,7 @@
 
 ## Usage
 
+
 1. Clone the repo and change to k8s-easy2 directory
     ```shell
     $ git clone https://github.com/vitorcool/k8s-easy2
@@ -65,6 +66,44 @@
     ```shell
     $ vagrant up
     ```
+    or
+    ```shell
+    $ vagrant up kdev1 # will UP only kdev1
+    $ vagrant up    
+    ```
+2. Solve install probleams
+    ```shell
+    # There are 3 Provision script:
+    #   1 bootstrap
+    #   2 kube
+    #   3 node
+
+    # Remenber:
+    # To be a Node, be kube first is a must
+    # Even a Kube has to Bootstrap
+
+    # So check instalation logs and :
+    # Provision Kube with bootstrap - 1st provision
+    $ vagrant up --provision-with bootstrap
+
+    # OR
+
+    # if bootstrap provision OK
+    # Provision kube - 2st provision
+    $ vagrant up --provision-with kube
+
+    # OR
+
+    # if Easy2 provision OK
+    # Provision E kube - 2st provision
+    $ vagrant up --provision-with kube
+    ```
+    or
+    ```shell
+    $ vagrant up kdev1 # will UP only kdev1
+    $ vagrant up    
+    ```
+
 3. Access Master node
     ```shell
     $ vagrant ssh vdev1
@@ -74,9 +113,38 @@
     $ vagrant reload    
     ```
 4. Destroy Cluster
-    ```shell
     $ vagrant destroy
     ```    
+## Node Provision
+
+### There are 3 Provision scripts:
+||script | install phase
+--- | --- | ---
+|1|bootstrap | OS enviroment
+|2|kube|Kubernetes Core
+|3|node| Cluster setup - Master node and Slave node
+
+
+1. Install provison - can solve problems
+```shell
+# Provision bootstrap - 1st provision
+$ vagrant up --provision-with bootstrap
+```
+```shell
+# if bootstrap provision OK
+# Provision kube - 2st provision
+$ vagrant up --provision-with kube
+```
+```shell
+# if provision kube OK
+# Provision E kube - 3td provision
+$ vagrant up --provision-with kube
+```
+```shell
+$ vagrant up kdev1 # will UP only kdev1
+$ vagrant up    
+```
+
 
 
 ## Inspired on code project :
@@ -87,5 +155,3 @@
 - [kubeadm](https://kubernetes.io/docs/admin/kubeadm/)
 - [Kubectl](https://kubernetes.io/docs/reference/kubectl/overview/)
 - [Docker](https://docs.docker.com/)
-
-You shoud watch the following blog post and videos:
